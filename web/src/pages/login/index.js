@@ -1,49 +1,83 @@
 //TODO trigger the verify user action when the user clicks the Login button...also
 //cause the page to redirect to the landing page once the user has logged in.
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import CSSModules from 'react-css-modules'
-import { Button, Icon, Input } from 'semantic-ui-react'
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+import CSSModules from "react-css-modules";
+import { Button, Icon, Input } from "semantic-ui-react";
 
-import css from './index.css'
-import { verifyUserRequest } from './actions'
+import css from "./index.css";
+import { verifyUserRequest } from "./actions";
 
 class Login extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      email: '',
-      password: ''
-    }
+      email: "",
+      password: ""
+    };
   }
 
-  handleInputEmail = (event) => {
-    event.preventDefault()
-    this.setState({ email: event.target.value })
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (
+  //     typeof this.props.login.user === "undefined" &&
+  //     typeof nextProps.login.user !== "undefined"
+  //   ) {
+  //     <Redirect to="/landing" />;
+  //   } else {
+  //     console.log("Here");
+  //   }
+  // }
 
-  handleInputPassword = (event) => {
-    event.preventDefault()
-    this.setState({ password: event.target.value })
-  }
+  handleInputEmail = event => {
+    event.preventDefault();
+    this.setState({ email: event.target.value });
+  };
+
+  handleInputPassword = event => {
+    event.preventDefault();
+    this.setState({ password: event.target.value });
+  };
 
   handleClick = () => {
-    const { email, password } = this.state
-    this.props.logInUser(email, password)
-  }
+    const { email, password } = this.state;
+    this.props.logInUser(email, password);
+  };
 
   render() {
-    console.log("Props", this.props)
+    // console.log("Props", this.props);
+    if (typeof this.props.login.user === "object") {
+      return <Redirect to="/landing" />;
+    }
     return (
       <div>
         <div styleName="title">Welcome to Helio Challenges</div>
         <div styleName="description"> Sign in with your information below</div>
         <form styleName="form">
-          <Input icon="user circle" iconPosition="left" size="big" placeholder="Your Email" type="text"
-            value={this.state.email} onChange={this.handleInputEmail} />
-          <Input icon="user circle" iconPosition="left" size="big" placeholder="Enter Password" type="password"
-            value={this.state.password} onChange={this.handleInputPassword} />
-          <Button type="button" animated color="green" onClick={this.handleClick}>
+          <Input
+            icon="user circle"
+            iconPosition="left"
+            size="big"
+            placeholder="Your Email"
+            type="text"
+            value={this.state.email}
+            onChange={this.handleInputEmail}
+          />
+          <Input
+            icon="user circle"
+            iconPosition="left"
+            size="big"
+            placeholder="Enter Password"
+            type="password"
+            value={this.state.password}
+            onChange={this.handleInputPassword}
+          />
+          <Button
+            type="button"
+            animated
+            color="green"
+            onClick={this.handleClick}
+          >
             <Button.Content visible>Login</Button.Content>
             <Button.Content hidden>
               <Icon name="right arrow" />
@@ -51,22 +85,25 @@ class Login extends Component {
           </Button>
         </form>
       </div>
-    )
+    );
   }
 }
 
 const mapStateToProps = state => {
   return {
-    loggedIn: state.loginpage.loggedIn
-  }
-}
+    login: state.loginpage
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
     logInUser: (email, password) => {
-      dispatch(verifyUserRequest(email, password))
+      dispatch(verifyUserRequest(email, password));
     }
-  }
-}
+  };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(CSSModules(Login, css))
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CSSModules(Login, css));

@@ -1,15 +1,15 @@
 export const initialState = {
-  loggedIn: false,
-}
+  user: undefined
+};
 
 export default function(state = initialState, action = {}) {
-  switch(action.type) {
-    case 'VERIFY_USER_SUCCESS':
+  switch (action.type) {
+    case "VERIFY_USER_SUCCESS":
       return {
         ...state,
-        loggedIn: true
-      }
+        user: action.user
+      };
     default:
-      return state
+      return state;
   }
 }
